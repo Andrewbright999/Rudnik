@@ -1,3 +1,4 @@
+from typing import Union
 import logging
 import asyncio, logging, sys, datetime
 
@@ -18,7 +19,7 @@ dp = Dispatcher()
 user_list = UserList()
 
 class GroupIdFilter(BaseFilter):  # [1]
-    def __init__(self, group_id: str | list | int): # [2]
+    def __init__(self, group_id: Union[str , list , int]): # [2]
         self.group_id = group_id
 
     async def __call__(self, message: Message) -> bool:  # [3]
@@ -35,7 +36,7 @@ class GroupIdFilter(BaseFilter):  # [1]
 
 async def send_save(message: Message): 
     pikle = FSInputFile(path=pikle_path, filename=f"save {datetime.datetime.now()}.pickle")
-    await message.bot.send_document(pikle, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
+    await message.bot.send_document(chat_id=ADMIN_ID, document=pikle, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
 
 
 @dp.message(Command("save")) 
