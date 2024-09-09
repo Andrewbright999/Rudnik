@@ -34,14 +34,16 @@ class GroupIdFilter(BaseFilter):  # [1]
 #     GroupIdFilter(group_id=[GROUP_ID, ADMIN_LIST])
 # )
 
-async def send_save(message: Message): 
+async def get_save(message: Message): 
     pikle = FSInputFile(path=pikle_path, filename=f"save {datetime.datetime.now()}.pickle")
-    await message.bot.send_document(chat_id=ADMIN_LIST, document=pikle, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
+    return pikle
 
 
 @dp.message(Command("save")) 
 async def cmd_start(message: Message):
-    await send_save(message)
+    file = await get_save(message)
+    await message.answer_document(document=file, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
+    
 
 @dp.message()
 async def message_with_text(message: Message):
