@@ -4,7 +4,7 @@ pikle_path = "user_data.pickle"
 
 
 if not os.path.exists(pikle_path):
-    data = ["@dasha"]
+    data = ["@Bright099"]
     with open(pikle_path, "wb") as file:
         pickle.dump(data, file)
         

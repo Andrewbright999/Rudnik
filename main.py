@@ -43,7 +43,7 @@ async def send_save(message: Message):
 async def cmd_start(message: Message):
     await send_save(message)
 
-@dp.message(F.text)
+@dp.message()
 async def message_with_text(message: Message):
     user_list.check_user(message.from_user.username)
     if message.text == "@all":
@@ -51,6 +51,7 @@ async def message_with_text(message: Message):
         msg = await message.answer(" ".join(msg))
         await msg.edit_text(text="@all")
         await send_save(message)
+        
         
         
 async def main() -> None:
