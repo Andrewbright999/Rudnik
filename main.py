@@ -6,7 +6,7 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, BaseFilter
 from aiogram.types import Message,  FSInputFile
 
-from config import TG_TOKEN, GROUP_ID, ADMIN_ID
+from config import TG_TOKEN, GROUP_ID, ADMIN_LIST
 from users import UserList, pikle_path
 
 
@@ -31,12 +31,12 @@ class GroupIdFilter(BaseFilter):  # [1]
         
         
 # dp.message.filter(
-#     GroupIdFilter(group_id=[GROUP_ID, ADMIN_ID])
+#     GroupIdFilter(group_id=[GROUP_ID, ADMIN_LIST])
 # )
 
 async def send_save(message: Message): 
     pikle = FSInputFile(path=pikle_path, filename=f"save {datetime.datetime.now()}.pickle")
-    await message.bot.send_document(chat_id=ADMIN_ID, document=pikle, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
+    await message.bot.send_document(chat_id=ADMIN_LIST, document=pikle, caption=f"Сохренение от {datetime.datetime.now()}\nКол-во чел: {len(user_list)}")
 
 
 @dp.message(Command("save")) 
