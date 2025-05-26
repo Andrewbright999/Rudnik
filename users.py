@@ -39,7 +39,7 @@ class UserList:
             print(f"Новый {username}")
             self.append(username)
 
-    def get_all_list(self):
+    def get_all_list(self) -> list:
         return self.username_list
 
     def __getitem__(self, key):

@@ -6,13 +6,16 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, BaseFilter
 from aiogram.types import Message,  FSInputFile
 
-from config import TG_TOKEN, GROUP_ID, ADMIN_LIST
+# from config import TG_TOKEN, GROUP_ID, ADMIN_LIST
 from users import UserList, pikle_path
+from ai_util import check_spam
 
 
 logger = logging.getLogger(__name__)
 
 logging.basicConfig(level=logging.INFO)
+
+TG_TOKEN = '6730177900:AAE4ZTKKD7mw0Nn0nGXUnNtSqArv64mCfA0'
 
 bot = Bot(token=TG_TOKEN)
 dp = Dispatcher()
@@ -34,7 +37,7 @@ class GroupIdFilter(BaseFilter):  # [1]
 #     GroupIdFilter(group_id=[GROUP_ID, ADMIN_LIST])
 # )
 
-async def get_save(message: Message): 
+async def get_save(): 
     pikle = FSInputFile(path=pikle_path, filename=f"save {datetime.datetime.now()}.pickle")
     return pikle
 
@@ -47,12 +50,22 @@ async def cmd_start(message: Message):
 
 @dp.message()
 async def message_with_text(message: Message):
-    user_list.check_user(message.from_user.username)
-    if message.text == "@all":
-        msg = user_list.get_all_list()
-        msg = await message.answer(" ".join(msg))
-        await msg.edit_text(text="@all")
-        await send_save(message)
+    spam = await check_spam(message.text)
+    if spam == "SPAM":
+        await message.delete()
+    else:
+        user_list.check_user(message.from_user.username)
+        if message.text == "@all":
+            msg = user_list.get_all_list()
+            msg_text:str = " ".join(msg)
+            while len(msg) > 4000:
+                msgs = msg.split(msg.find(" ", 4000, 4090))
+                for i in msgs:
+                    m = await message.answer(i)
+                    await m.edit_text(text="@all")
+            else:
+                msg = await message.answer(msg_text)
+                await msg.edit_text(text="@all")
         
         
         
